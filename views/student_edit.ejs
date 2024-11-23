@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/head.ejs') %>
+
+<body class="app">
+    <header class="app-header fixed-top">
+        <%- include('./partials/navtop.ejs') %>
+        <%- include('./partials/navside.ejs') %>
+    </header><!--//app-header-->
+
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+
+    <div class="app-wrapper">
+        <div class="app-content pt-3 p-md-3 p-lg-4">
+            <div class="container-xl">
+                <h1 class="app-page-title">Edit Student</h1>
+                <hr class="mb-4">
+                <div class="row g-4 settings-section">
+                    <div class="col-12 col-md-8">
+                        <div class="app-card app-card-settings shadow-sm p-4">
+                            <div class="app-card-body">
+                                <form class="settings-form" method="post" action="/students/update/<%= student.id %>" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="firstName" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="firstName" value="<%= student.firstName %>" name="firstName" required>
+                                        <% if (errors) { %>
+                                            <% errors.forEach(error => { %>
+                                                <% if (error.path === 'firstName') { %>
+                                                    <span class="error"><%= error.msg %></span>
+                                                <% } %>
+                                            <% }) %>
+                                        <% } %>
+                                    </div>
+                                    <div class="mb-3"></div>
+                                        <label for="middleName" class="form-label">Middle Name</label>
+                                        <input type="text" class="form-control" id="middleName" value="<%= student.middleName %>" name="middleName">
+                                        <% if (errors) { %>
+                                            <% errors.forEach(error => { %>
+                                                <% if (error.path === 'middleName') { %>
+                                                    <span class="error"><%= error.msg %></span>
+                                                <% } %>
+                                            <% }) %>
+                                        <% } %>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" value="<%= student.lastName %>" name="lastName">
+                                        <% if (errors) { %>
+                                            <% errors.forEach(error => { %>
+                                                <% if (error.path === 'lastName') { %>
+                                                    <span class="error"><%= error.msg %></span>
+                                                <% } %>
+                                            <% }) %>
+                                        <% } %>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="email" name="email" value="<%= student.email %>">
+                                        <% if (errors) { %>
+                                            <% errors.forEach(error => { %>
+                                                <% if (error.path === 'email') { %>
+                                                    <span class="error"><%= error.msg %></span>
+                                                <% } %>
+                                            <% }) %>
+                                        <% } %>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="idNumber" class="form-label">ID Number</label>
+                                        <input type="text" class="form-control" id="idNumber" value="<%= student.idNumber %>" name="idNumber" required>
+                                        <% if (errors) { %>
+                                            <% errors.forEach(error => { %>
+                                                <% if (error.path === 'idNumber') { %>
+                                                    <span class="error"><%= error.msg %></span>
+                                                <% } %>
+                                            <% }) %>
+                                        <% } %>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="yearLevel" class="form-label">Year Level</label>
+                                        <select name="yearLevel" id="yearLevel" class="form-control" required>
+                                            <option value=""></option>
+                                            <option value="1" <%= student.yearLevel == '1' ? 'selected' : '' %>>First Year</option>
+                                            <option value="2" <%= student.yearLevel == '2' ? 'selected' : '' %>>Second Year</option>
+                                            <option value="3" <%= student.yearLevel == '3' ? 'selected' : '' %>>Third Year</option>
+                                            <option value="4" <%= student.yearLevel == '4' ? 'selected' : '' %>>Fourth Year</option>
+                                        </select>
+                                        <% if (errors) { %>
+                                            <% errors.forEach(error => { %>
+                                                <% if (error.path === 'yearLevel') { %>
+                                                    <span class="error"><%= error.msg %></span>
+                                                <% } %>
+                                            <% }) %>
+                                        <% } %>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="section" class="form-label">Section</label>
+                                        <select name="section" id="section" class="form-control" required>
+                                            <option value=""></option>
+                                            <option value="F1" <%= student.section === 'F1' ? 'selected' : '' %>>F1</option>
+                                            <option value="F2" <%= student.section === 'F2' ? 'selected' : '' %>>F2</option>
+                                            <option value="F3" <%= student.section === 'F3' ? 'selected' : '' %>>F3</option>
+                                            <option value="F4" <%= student.section === 'F4' ? 'selected' : '' %>>F4</option>
+                                            <option value="F5" <%= student.section === 'F5' ? 'selected' : '' %>>F5</option>
+                                            <option value="F6" <%= student.section === 'F6' ? 'selected' : '' %>>F6</option>
+                                            <option value="F7" <%= student.section === 'F7' ? 'selected' : '' %>>F7</option>
+                                            <option value="F8" <%= student.section === 'F8' ? 'selected' : '' %>>F8</option>
+                                        </select>
+                                        <% if (errors) { %>
+                                            <% errors.forEach(error => { %>
+                                                <% if (error.path === 'section') { %>
+                                                    <span class="error"><%= error.msg %></span>
+                                                <% } %>
+                                            <% }) %>
+                                        <% } %>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="photo">Upload Photo:</label>
+                                        <input type="file" id="photo" name="photo">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="rfId" class="form-label">RFID</label>
+                                        <input type="number" class="form-control" id="rfId" value="<%= student.rfId %>" name="rfId" required>
+                                    </div>
+                                    <button type="submit" class="btn app-btn-primary">Update</button>
+                                </form>
+                            </div><!--//app-card-body-->
+                        </div><!--//app-card-->
+                    </div>
+                </div><!--//row-->
+            </div>
+        </div>
+
+        <%- include('./partials/footbar.ejs') %>
+    </div>
+
+    <%- include('./partials/footer.ejs') %>
+
+</body>
+
+</html>

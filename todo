@@ -1,0 +1,29 @@
+
+- Settings GUI (CRUD)
+
+
+- Validations of Inputs inside Route 
+
+    // Example of validation and sanitization middleware (Express-validator)
+    const registrationValidators = [
+        body('email').isEmail().normalizeEmail(),
+        body('name').trim().escape(),
+        body('password').isLength({ min: 8 }).trim().escape(),
+    ];
+
+- Sanitations
+
+    const sample = (req, res) => {
+      const { encode } = require('html-entities');
+      const data = db.User.find();
+      // Sanitize data
+      const sanitizedData = data.map(data => {
+          return {
+              id: data.id,
+              name: encode(data.name), // HTML-encode user name
+              // Add more fields to sanitize as needed
+              description: encode(data.description),
+          };
+      });
+      res.render('sample',  { 'info': sanitizedData });
+    };

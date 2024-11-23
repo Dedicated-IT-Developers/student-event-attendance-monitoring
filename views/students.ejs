@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+<%- include('./partials/head.ejs') %>
+
+<body class="app">   	
+    <header class="app-header fixed-top">	
+
+        <%- include('./partials/navtop.ejs') %>
+        <%- include('./partials/navside.ejs') %>
+
+    </header><!--//app-header-->
+    
+    <div class="app-wrapper">
+	    
+	    <div class="app-content pt-3 p-md-3 p-lg-4">
+		    <div class="container-xl">
+			    
+			    <h1 class="app-page-title">Students</h1>
+			    
+			    <a href="/students/new" class="btn btn-success btn-sm"> <i class="fa fa-plus"></i> Add New</a>
+			    <a href="/students/import" class="btn btn-warning btn-sm"> <i class="fa fa-arrow-up"></i> Import</a>
+
+          <br>
+          <br>
+
+          <!-- Filter Form -->
+          <form method="get" action="/students">
+            <div class="input-group mb-3">
+                <input type="text" name="idNumber" class="form-control" placeholder="Filter by ID Number" value="<%= idNumber %>">
+                <button class="btn btn-secondary" type="submit">Filter</button>
+            </div>
+          </form>
+          
+			    <div class="row g-4 mb-4">
+
+                    <div class="app-card app-card-orders-table shadow-sm mb-5">
+                        <div class="app-card-body">
+                            <div class="table-responsive">
+                                <table class="table app-table-hover mb-0 text-left">
+                                    <thead>
+                                        <tr>
+                                          <th class="cell">#</th>
+                                          <th class="cell">ID Number</th>
+                                          <th class="cell">First Name</th>
+                                          <th class="cell">Last Name</th>
+                                          <th class="cell">Email</th>
+                                          <th class="cell">Year</th>
+                                          <th class="cell">Section</th>
+                                          <th class="cell">Sem Enrolled</th>
+                                          <th class="cell">AY Enrolled</th>
+                                          <th class="cell"></th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <% let count = (currentPage - 1) * 10 + 1; %>
+                                        <% students.forEach((user, index) => { %>
+                                          <tr>
+                                            <!--td class="cell"><%= index + 1 %></td-->
+                                            <td class="cell"><%= count++ %></td> <!-- Auto count number -->
+                                            <td class="cell"><%= user.idNumber %></td>
+                                            <td class="cell"><%= user.firstName %></td>
+                                            <td class="cell"><%= user.lastName %></td>
+                                            <td class="cell"><%= user.email %></td>
+                                            <td class="cell"><%= user.yearLevel %></td>
+                                            <td class="cell"><%= user.section %></td>
+                                            <td class="cell"><%= user.Enrolled ? user.Enrolled.semester : '' %></td>
+                                            <td class="cell"><%= user.Enrolled ? user.Enrolled.acadYear : '' %></td>
+                                            <td class="cell"><a href="/students/edit/<%= user.id %>">edit</a></td>
+                                          </tr>
+                                        <% }); %>
+                                      </tbody>
+                                </table>
+                            </div><!--//table-responsive-->
+
+                        </div><!--//app-card-body-->		
+                    </div><!--//app-card-->
+
+                    <nav class="app-pagination">
+                      <ul class="pagination justify-content-center">
+                        
+                        <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                          <a class="page-link" href="?page=1&pageSize=<%= pageSize %>">First</a>
+                        </li>
+                        
+                        <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                          <a class="page-link" href="?page=<%= currentPage - 1 %>&pageSize=<%= pageSize %>">Previous</a>
+                        </li>
+                    
+                        <% 
+                          var maxVisiblePages = 5; // Maximum visible page numbers
+                          var startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+                          var endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+                    
+                          // Adjust startPage if there are not enough pages before the current page
+                          if (endPage - startPage < maxVisiblePages - 1) {
+                            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                          }
+                        %>
+                        
+                        <% if (startPage > 1) { %>
+                          <li class="page-item">
+                            <a class="page-link" href="?page=1&pageSize=<%= pageSize %>">1</a>
+                          </li>
+                          <% if (startPage > 2) { %>
+                            <li class="page-item disabled">
+                              <span class="page-link">...</span>
+                            </li>
+                          <% } %>
+                        <% } %>
+                        
+                        <% for (let i = startPage; i <= endPage; i++) { %>
+                          <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                            <a class="page-link" href="?page=<%= i %>&pageSize=<%= pageSize %>"><%= i %></a>
+                          </li>
+                        <% } %>
+                    
+                        <% if (endPage < totalPages) { %>
+                          <% if (endPage < totalPages - 1) { %>
+                            <li class="page-item disabled">
+                              <span class="page-link">...</span>
+                            </li>
+                          <% } %>
+                          <li class="page-item">
+                            <a class="page-link" href="?page=<%= totalPages %>&pageSize=<%= pageSize %>"><%= totalPages %></a>
+                          </li>
+                        <% } %>
+                    
+                        <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                          <a class="page-link" href="?page=<%= currentPage + 1 %>&pageSize=<%= pageSize %>">Next</a>
+                        </li>
+                    
+                        <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                          <a class="page-link" href="?page=<%= totalPages %>&pageSize=<%= pageSize %>">Last</a>
+                        </li>
+                      </ul>
+                    </nav>
+                    <!--//app-pagination-->
+
+			    </div><!--//row-->
+			    
+		    </div><!--//container-fluid-->
+	    </div><!--//app-content-->
+	    
+	    <%- include('./partials/footbar.ejs') %>
+	    
+    </div><!--//app-wrapper-->    					
+
+    <%- include('./partials/footer.ejs') %>
+
+</body>
+</html> 
+

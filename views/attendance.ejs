@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+<%- include('./partials/head.ejs') %>
+
+<body class="app">   	
+    <header class="app-header fixed-top">	
+
+        <%- include('./partials/navtop.ejs') %>
+        <%- include('./partials/navside.ejs') %>
+
+    </header><!--//app-header-->
+    
+    <div class="app-wrapper">
+	    
+	    <div class="app-content pt-3 p-md-3 p-lg-4">
+		    <div class="container-xl">
+			    
+			    <h1 class="app-page-title">Attendance</h1>
+			    
+			    
+			    <div class="row g-4 mb-4">
+
+                    <div class="app-card app-card-orders-table shadow-sm mb-5">
+                        <div class="app-card-body">
+                            <div class="table-responsive">
+
+                                <form method="get" action="/attendance" class="mt-3 mb-3">
+                                    <label for="startDate">Start Date:</label>
+                                    <input type="date" id="startDate" name="startDate" value="<%= startDate %>" class="form-control-sm">
+
+                                    <label for="endDate">End Date:</label>
+                                    <input type="date" id="endDate" name="endDate" value="<%= endDate %>" class="form-control-sm">
+
+                                    <label for="ActivityId">Activity:</label>
+                                    <select name="ActivityId" id="ActivityId" class="form-control-sm" required>
+
+                                        <option value=""></option>
+                                        
+                                        <% activities.forEach((act, index) => { %>
+                                            <option value="<%= act.id %>" <% if (act.id == ActivityId) { %> selected <% } %> > <%= act.activityName %> </option>
+                                        <% }); %>
+            
+                                    </select>
+
+                                    <button type="submit" class="btn btn-md btn-primary">Filter</button>
+                                    <button type="submit" name="export" value="true" class="btn btn-md btn-warning">Export to Excel</button>
+
+                                </form>
+
+                                <table class="table app-table-hover mb-0 text-left">
+                                    <thead>
+                                        <tr>
+                                            <th class="cell">#</th>
+                                            <th class="cell">ID Number</th>
+                                            <th class="cell">First Name</th>
+                                            <th class="cell">Last Name</th>
+                                            <th class="cell">Email</th>
+                                            <th class="cell">Date</th>
+                                            <th class="cell">Event</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <% let count = (currentPage - 1) * 10 + 1; %>
+                                        <% attendances.forEach(attendance => { %>
+                                            <tr>
+                                                <td class="cell"><%= count++ %></td>
+                                                <td class="cell"><%= attendance.Student ? attendance.Student.idNumber : 'N/A' %></td>
+                                                <td class="cell"><%= attendance.Student ? attendance.Student.firstName : 'N/A' %></td>
+                                                <td class="cell"><%= attendance.Student ? attendance.Student.lastName : 'N/A' %></td>
+                                                <td class="cell"><%= attendance.Student ? attendance.Student.email : 'N/A' %></td>
+                                                <td class="cell"><%= attendance.date.toLocaleString() %></td>
+                                                <td class="cell"><%= attendance.Student ? attendance.Activity.activityName : 'N/A' %></td>
+                                            </tr>
+                                        <% }); %>
+                                        
+    
+                                    </tbody>
+                                </table>
+
+                                
+
+                            </div><!--//table-responsive-->
+                           
+                        </div><!--//app-card-body-->		
+                    </div><!--//app-card-->
+                    
+                    <nav class="app-pagination">
+
+                        <ul class="pagination justify-content-center">
+
+                            <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                                <a class="page-link" href="?page=1&startDate=<%= startDate %>&endDate=<%= endDate %>">First</a>
+                            </li>
+
+                            <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                                <a class="page-link" href="?page=<%= currentPage - 1 %>&startDate=<%= startDate %>&endDate=<%= endDate %>">Previous</a>
+                            </li>
+
+                    
+                        <% for (let i = 1; i <= totalPages; i++) { %>
+
+                            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                <a class="page-link" href="?page=<%= i %>&startDate=<%= startDate %>&endDate=<%= endDate %>"><%= i %></a>
+                            </li>
+                            
+                        <% } %>
+
+                        <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                            <a class="page-link" href="?page=<%= currentPage + 1 %>&startDate=<%= startDate %>&endDate=<%= endDate %>">Next</a>
+                        </li>
+                        <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                            <a class="page-link" href="?page=<%= totalPages %>&startDate=<%= startDate %>&endDate=<%= endDate %>">Last</a>
+                        </li>
+
+                        </ul>
+                    </nav><!--//app-pagination-->
+
+			    </div><!--//row-->
+			    
+		    </div><!--//container-fluid-->
+	    </div><!--//app-content-->
+	    
+	    <%- include('./partials/footbar.ejs') %>
+	    
+    </div><!--//app-wrapper-->    					
+
+    <%- include('./partials/footer.ejs') %>
+
+</body>
+</html> 
+

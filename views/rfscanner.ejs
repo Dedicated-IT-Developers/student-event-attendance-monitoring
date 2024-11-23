@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+<%- include('./partials/head.ejs') %>
+
+<style>
+    #results {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+	justify-content: center;
+	width: 100%;
+	max-width: 800px;
+	}
+	
+	.profile-card {
+	background-color: white;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	padding: 10px;
+	width: 200px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	}
+	
+	.profile-name {
+	font-weight: bold;
+	margin-bottom: 5px;
+	}
+	
+	.profile-id, .profile-email {
+	margin: 0;
+	font-size: 14px;
+	color: #555;
+	}
+
+	.no-results {
+		font-size: 18px;
+		color: #888;
+		width: 100%;
+	  }
+
+	.profile-photo {
+		width: 100px;
+		height: 100px;
+		border-radius: 50%;
+		object-fit: cover;
+		margin-bottom: 10px;
+	  }
+
+</style>
+
+<script>
+
+	let clearResultsTimeout;
+	let tapCount = 0;
+	let lastTappedRFID = '';
+	let tapTimeout;
+	
+    document.addEventListener('DOMContentLoaded', (event) => {
+
+		const input = document.getElementById('rfId');
+      	input.focus();
+
+		let scannedData = '';
+
+
+		document.addEventListener('keypress', (event) => {
+			
+			// Clear any existing timeout
+			if (clearResultsTimeout) {
+				clearTimeout(clearResultsTimeout);
+			}
+
+			if (event.key === 'Enter') {
+
+				const ActivityId = document.getElementById('ActivityId').value;
+				console.log(ActivityId)
+
+				//Tap count
+				if (lastTappedRFID !== scannedData) {
+					tapCount = 0; // Reset tap count if different RFID is tapped
+					lastTappedRFID = scannedData;
+				}
+				
+				
+				// Make a fetch request to the server to search for profiles
+				fetch(`/scan?query=${scannedData}`)
+				.then(response => response.json())
+				.then(data => {
+
+					console.log(data);
+
+					// Clear any previous results
+					const resultsContainer = document.getElementById('results');
+					resultsContainer.innerHTML = '';
+
+					// Check if there are any results
+					if (data.length === 0) {
+						const noResultsElement = document.createElement('div');
+						noResultsElement.textContent = 'No Results Found!';
+						noResultsElement.className = 'no-results';
+						resultsContainer.appendChild(noResultsElement);
+						document.getElementById('att').innerHTML = '';
+					} else {
+						// Handle the response data (e.g., display the search results)
+						data.forEach(profile => {
+							const profileElement = document.createElement('div');
+							profileElement.className = 'profile-card';
+
+							const nameElement = document.createElement('p');
+							nameElement.textContent = `${profile.firstName} ${profile.lastName}`;
+							nameElement.className = 'profile-name';
+
+							const idElement = document.createElement('p');
+							idElement.textContent = `ID: ${profile.idNumber}`;
+							idElement.className = 'profile-id';
+
+							const emailElement = document.createElement('p');
+							emailElement.textContent = `Email: ${profile.email}`;
+							emailElement.className = 'profile-email';
+
+							if (profile.photoUrl) {
+								const photoElement = document.createElement('img');
+								photoElement.src = profile.photoUrl;
+								photoElement.className = 'profile-photo';
+								profileElement.appendChild(photoElement);
+							  }else{
+								const photoElement = document.createElement('img');
+								photoElement.src = '/uploads/user.webp';
+								photoElement.className = 'profile-photo';
+								profileElement.appendChild(photoElement);
+							  }
+
+							profileElement.appendChild(nameElement);
+							profileElement.appendChild(idElement);
+							profileElement.appendChild(emailElement);
+
+							resultsContainer.appendChild(profileElement);
+
+							fetch('/scan/check', {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json'
+								},
+								body: JSON.stringify({ 
+									id: profile.id,
+									ActivityId: ActivityId 
+								})
+							})
+							.then(response => response.json())
+							.then(attendanceData => {
+								if (attendanceData.canSubmit) {
+
+
+									//save
+									// Make a fetch request to submit the attendance
+									fetch('/scan/submit', {
+										method: 'POST',
+										headers: {
+										'Content-Type': 'application/json'
+										},
+										body: JSON.stringify({ 
+											id: profile.id,
+											ActivityId: ActivityId 
+										})
+									})
+									.then(response => response.json())
+									.then(data => {
+										// Handle the response data (e.g., show a success message)
+										console.log('Attendance submitted for:', profile.firstName, profile.lastName);
+										document.getElementById('att').innerHTML = 'Attendance submitted for: ' + profile.firstName + ' ' + profile.lastName;
+										console.log(data);
+									})
+									.catch(error => console.error('Error:', error));
+									//end save
+
+								} 
+								else 
+								{
+									
+									console.log('Attendance already recorded within 30 minutes for:', document.getElementById('ActivityId').options[document.getElementById('ActivityId').selectedIndex].text, profile.firstName, profile.lastName);
+									document.getElementById('att').innerHTML = 'Attendance already recorded at ' + document.getElementById('ActivityId').options[document.getElementById('ActivityId').selectedIndex].text + ' of ' + profile.firstName + ' ' + profile.lastName;
+									
+									tapCount++;
+									
+									if (tapCount >= 3) {
+										fetch('/scan/remove', {
+											method: 'POST',
+											headers: {
+												'Content-Type': 'application/json'
+											},
+											//body: JSON.stringify({ rfId: scannedData })
+											body: JSON.stringify({ 
+												id: profile.id,
+												ActivityId: ActivityId 
+											})
+										})
+										.then(response => response.json())
+										.then(data => {
+											console.log('Attendance removed for:', profile.firstName);
+											document.getElementById('att').innerHTML = 'Attendance removed for: ' + profile.firstName;
+										})
+										.catch(error => console.error('Error:', error));
+										
+										tapCount = 0; // Reset tap count after removing attendance
+										scannedData = '';
+										return;
+									}
+									clearTimeout(tapTimeout); // Clear the timeout if another tap happens within 30 seconds
+									tapTimeout = setTimeout(() => {
+										tapCount = 0; // Reset tap count after 30 seconds of inactivity
+									}, 30000);
+									//end tap count
+
+								}
+							})
+							.catch(error => console.error('Error:', error));
+
+							// Clear
+							document.getElementById('rfId').value = '';
+							document.getElementById('rfId').focus();
+
+						});
+					}
+
+					// Set a timeout to clear the results after 5 seconds
+					clearResultsTimeout = setTimeout(() => {
+						resultsContainer.innerHTML = '';
+						document.getElementById('att').innerHTML = '';
+						document.getElementById('rfId').value = '';
+						document.getElementById('rfId').focus();
+					}, 5000);
+
+				})
+				.catch(error => console.error('Error:', error));
+
+				scannedData = '';
+				
+			} else {
+				scannedData += event.key;
+			}
+
+
+		});
+
+
+
+    });
+
+
+</script>
+
+<body class="app app-404-page">   	
+
+    <div class="container mb-5">
+	    <div class="row">
+		    <div class="col-12 col-md-11 col-lg-7 col-xl-6 mx-auto">
+			    <div class="app-branding text-center mb-5">
+		            
+		        </div><!--//app-branding-->  
+			    <div class="app-card p-5 text-center shadow-sm">
+				    <h1 class="page-title mb-4">BSIT<br><span class="font-weight-light">Attendance Monitoring System</span></h1>
+					<p>
+						<select name="ActivityId" id="ActivityId" class="form-control-sm">
+							
+							<% activities.forEach((act, index) => { %>
+								<option value="<%= act.id %>"><%= act.activityName %></option>
+							<% }); %>
+
+						</select>
+					</p>
+					<div style="align-items: center;">
+						<div id="results"></div>
+						<p id="att"></p>
+					</div>
+				    <div class="mb-4">
+					    <h4> Please scan your ID. </h4>
+                        <img src="/images/loader.gif" alt="">
+						<input type="hidden" id="rfId" name="rfId">
+				    </div>
+				    <a class="btn app-btn-primary" href="/">Back to home page</a>
+			    </div>
+		    </div><!--//col-->
+	    </div><!--//row-->
+    </div><!--//container-->
+     					
+	
+
+    <%- include('./partials/footer.ejs') %>
+
+</body>
+</html> 
+

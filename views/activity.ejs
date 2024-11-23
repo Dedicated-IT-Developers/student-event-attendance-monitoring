@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+<%- include('./partials/head.ejs') %>
+
+<body class="app">   	
+    <header class="app-header fixed-top">	
+
+        <%- include('./partials/navtop.ejs') %>
+        <%- include('./partials/navside.ejs') %>
+
+    </header><!--//app-header-->
+    
+    <div class="app-wrapper">
+	    
+	    <div class="app-content pt-3 p-md-3 p-lg-4">
+		    <div class="container-xl">
+			    
+			    <h1 class="app-page-title">Activity</h1>
+			    
+			    <a href="/activities/new" class="btn btn-success btn-sm"> <i class="fa fa-plus"></i> Add New</a>
+          <br>
+          <br>
+          
+			    <div class="row g-4 mb-4">
+
+                    <div class="app-card app-card-orders-table shadow-sm mb-5">
+                        <div class="app-card-body">
+                            <div class="table-responsive">
+                                <table class="table app-table-hover mb-0 text-left">
+                                    <thead>
+                                        <tr>
+                                          <th class="cell">#</th>
+                                          <th class="cell">Name</th>
+                                          <th class="cell">Date</th>
+                                          <th class="cell">Sem</th>
+                                          <th class="cell">AY</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <% activity.forEach((act, index) => { %>
+                                          <tr>
+                                            <td class="cell"><%= index + 1 %></td> <!-- Auto count number -->
+                                            <td class="cell"><%= act.activityName %></td>
+                                            <td class="cell"><%= act.date %></td>
+                                            <td class="cell"><%= act.semester %></td>
+                                            <td class="cell"><%= act.acadYear %></td>
+                                          </tr>
+                                        <% }); %>
+                                      </tbody>
+                                </table>
+                            </div><!--//table-responsive-->
+
+                        </div><!--//app-card-body-->		
+                    </div><!--//app-card-->
+                    <nav class="app-pagination">
+                        <ul class="pagination justify-content-center">
+
+                          <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                            <a class="page-link" href="?page=1&pageSize=<%= pageSize %>">First</a>
+                          </li>
+                          <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                            <a class="page-link" href="?page=<%= currentPage - 1 %>&pageSize=<%= pageSize %>">Previous</a>
+                          </li>
+                          <% for(let i = 1; i <= totalPages; i++) { %>
+                            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                              <a class="page-link" href="?page=<%= i %>&pageSize=<%= pageSize %>"><%= i %></a>
+                            </li>
+                          <% } %>
+                          <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                            <a class="page-link" href="?page=<%= currentPage + 1 %>&pageSize=<%= pageSize %>">Next</a>
+                          </li>
+                          <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                            <a class="page-link" href="?page=<%= totalPages %>&pageSize=<%= pageSize %>">Last</a>
+                          </li>
+
+                        </ul>
+                    </nav><!--//app-pagination-->
+
+			    </div><!--//row-->
+			    
+		    </div><!--//container-fluid-->
+	    </div><!--//app-content-->
+	    
+	    <%- include('./partials/footbar.ejs') %>
+	    
+    </div><!--//app-wrapper-->    					
+
+    <%- include('./partials/footer.ejs') %>
+
+</body>
+</html> 
+
