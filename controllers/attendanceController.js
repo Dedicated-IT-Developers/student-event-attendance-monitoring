@@ -31,11 +31,27 @@ const index = async (req, res) => {
     if (exportFlag) {
       
       // Fetch all students
+      // const students = await db.Student.findAll({
+      //   order: [
+      //     ['idNumber', 'ASC']
+      //   ]
+      // });
+
+      // Fetch only students enrolled in the active semester and academic year
       const students = await db.Student.findAll({
-        order: [
-          ['idNumber', 'ASC']
-        ]
+        include: [
+          {
+            model: db.Enrolled,
+            where: {
+              semester: semester,
+              acadYear: acadYear
+            },
+            required: true // Ensures only students with matching Enrolled records are fetched
+          }
+        ],
+        order: [['idNumber', 'ASC']]
       });
+
 
       // Fetch all attendance records within the specified date range and activity
       const attendances = await db.Attendance.findAll({

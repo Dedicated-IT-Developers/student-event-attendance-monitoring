@@ -34,7 +34,7 @@
             
                   <div class="app-card-body">
                     <form class="settings-form" method="post" action="/activities/create" >
-
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>"> <!-- Add CSRF token here -->
                       <div class="mb-3">
                         <label for="activityName" class="form-label">Name</label>
                         <input type="text" class="form-control" id="activityName" value="" name="activityName" required>

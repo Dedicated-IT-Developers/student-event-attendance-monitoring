@@ -23,7 +23,8 @@ const scanner = async (req, res) => {
 
         const profiles = await db.Student.findAll(
             { 
-                where: { rfId: query, semester: semester, acadYear: acadYear } ,
+                where: { rfId: query } ,
+                //where: { rfId: query, semester: semester, acadYear: acadYear } ,
                 attributes: ['id', 'firstName', 'lastName', 'idNumber', 'email', 'photoUrl']
             }
         );

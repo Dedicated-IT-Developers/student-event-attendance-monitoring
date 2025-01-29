@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+<%- include('./partials/head.ejs') %>
+
+<body class="app">   	
+    <header class="app-header fixed-top">	
+
+        <%- include('./partials/navtop.ejs') %>
+        <%- include('./partials/navside.ejs') %>
+
+    </header><!--//app-header-->
+    
+    <div class="app-wrapper">
+	    
+	    <div class="app-content pt-3 p-md-3 p-lg-4">
+		    <div class="container-xl">
+			    
+			    <h1 class="app-page-title">Update Active Setting</h1>
+			    
+			    <div class="row g-4 mb-4">
+
+            <form action="/settings/update" method="POST">
+
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>"> <!-- Add CSRF token here -->
+
+              <label for="activeSemester">Active Semester:</label>
+              <input
+                type="text"
+                id="activeSemester"
+                name="activeSemester"
+                value="<%= setting.activeSemester %>"
+                required
+              />
+              <br /><br />
+              <label for="activeAcadYear">Active Academic Year:</label>
+              <input
+                type="text"
+                id="activeAcadYear"
+                name="activeAcadYear"
+                value="<%= setting.activeAcadYear %>"
+                required
+              />
+              <br /><br />
+              <button type="submit">Update Setting</button>
+            </form>
+
+			    </div><!--//row-->
+			    
+		    </div><!--//container-fluid-->
+	    </div><!--//app-content-->
+	    
+	    <%- include('./partials/footbar.ejs') %>
+	    
+    </div><!--//app-wrapper-->    					
+
+    <%- include('./partials/footer.ejs') %>
+
+</body>
+</html> 

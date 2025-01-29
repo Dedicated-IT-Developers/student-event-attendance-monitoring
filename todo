@@ -1,4 +1,57 @@
 
+
+Switching to the Next Semester / Academic Year:
+- student controller
+* getEnrollmentForm - search ID Number, display info to inputs
+* enrollStudent - then update the info (year level, Section, etc), it will auto save to enrolled table
+
+
+* import student - check if have already that ID number, then update only if already exist
+* Add student - check if have already that ID number, then update only if already exist
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 - Settings GUI (CRUD)
 
 

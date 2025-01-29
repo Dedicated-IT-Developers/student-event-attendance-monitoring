@@ -176,6 +176,7 @@ const updateStudent = async (req, res) => {
         });
     }
 
+    
     try {
         const student = await db.Student.findOne({
             where: {
@@ -197,7 +198,8 @@ const updateStudent = async (req, res) => {
         }
 
         await student.save();
-        res.redirect('/students');
+        req.flash('info', "Success!");
+        res.redirect('/students/edit/' + req.params.id);
     } catch (error) {
         console.log(error);
         res.redirect('/students');
@@ -253,6 +255,13 @@ const importStudents = async (req, res) => {
                 year_level = 4;
             }
 
+            let section = '';
+            try {
+                section = row.getCell(8).value.split('-')[1];
+            } catch (error) {
+                section = ''; // Fallback if an error occurs
+            }
+
             const studentData = {
                 idNumber: row.getCell(1).value,
                 firstName: row.getCell(3).value,
@@ -260,7 +269,7 @@ const importStudents = async (req, res) => {
                 lastName: row.getCell(2).value,
                 email: row.getCell(5).value,
                 yearLevel: year_level,
-                section: row.getCell(8).value.split('-')[1]
+                section: section
             };
 
             try {
@@ -282,8 +291,9 @@ const importStudents = async (req, res) => {
             }
         }
 
-        res.render('student_import', { message: `${savedCount} of ${totalCount} rows saved successfully` , 'title'     : 'Import Student', 
+        res.render('student_import', { message: `${savedCount} of ${totalCount} rows saved/updated successfully` , 'title'     : 'Import Student', 
             'page_name' : 'studentimport'});
+            
     } catch (error) {
         console.error('Error reading Excel file:', error.message);
         res.render('student_import', { message: 'Error reading Excel file' , 'title'     : 'Import Student', 
@@ -299,6 +309,85 @@ const importStudents = async (req, res) => {
 };
 
 
+/**
+ * Get student by ID and render edit form
+ * @param {*} req 
+ * @param {*} res 
+ */
+const getEnrollmentForm = async (req, res) => {
+    try {
+        const student = await db.Student.findOne({
+            where: {
+                id: req.params.id
+            }
+        });
+        //.findById(req.params.id);
+        res.render('student_enrollment', { 
+            'student' : student, 
+            'title' : 'Edit Student', 
+            'page_name' : 'studentedit', 
+            errors: null 
+        });
+    } catch (error) {
+        console.log(error);
+        res.redirect('/students');
+    }
+};
+
+/**
+ * Update Student (form and submit)
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+const enrollStudent = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const student = await db.Student.findOne({
+            where: {
+                id: req.params.id
+            }
+        });
+        //.findById(req.params.id);
+        return res.render('student_enrollment', { 
+            'student' : student, 
+            'title' : 'Edit Student', 
+            'page_name' : 'studentedit', 
+            errors: null 
+        });
+    }
+
+    
+    try {
+        const student = await db.Student.findOne({
+            where: {
+                id: req.params.id
+            }
+        });
+
+        student.firstName = req.body.firstName;
+        student.middleName = req.body.middleName;
+        student.lastName = req.body.lastName;
+        student.email = req.body.email;
+        student.idNumber = req.body.idNumber;
+        student.yearLevel = req.body.yearLevel;
+        student.section = req.body.section;
+        student.rfId = req.body.rfId;
+
+        if (req.file) {
+            student.photo = req.file.filename;
+        }
+
+        await student.save();
+        req.flash('info', "Success!");
+        res.redirect('/students/edit/' + req.params.id);
+    } catch (error) {
+        console.log(error);
+        res.redirect('/students');
+    }
+};
+
+
 module.exports = {
     index,
     createStudent,
@@ -306,5 +395,7 @@ module.exports = {
     getEditForm,
     updateStudent,
     getImportForm,
-    importStudents
+    importStudents,
+    getEnrollmentForm,
+    enrollStudent
 }

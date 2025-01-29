@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       if (settingCount === 0) {
         // If no rows exist, create a default row
         await Setting.create({
-          activeSemester: "1",      // Default value
+          activeSemester: "2",      // Default value
           activeAcadYear: "2024-2025"  // Default value
         });
       }

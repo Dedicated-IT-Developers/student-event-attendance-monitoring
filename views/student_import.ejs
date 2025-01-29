@@ -19,6 +19,7 @@
                         <div class="app-card app-card-settings shadow-sm p-4">
                             <div class="app-card-body">
                                 <form class="settings-form" method="post" action="/students/import" enctype="multipart/form-data">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>"> <!-- Add CSRF token here -->
                                     <div class="mb-3">
                                         <label for="file" class="form-label">Upload Excel File</label>
                                         <input type="file" class="form-control" id="file" name="file" required>

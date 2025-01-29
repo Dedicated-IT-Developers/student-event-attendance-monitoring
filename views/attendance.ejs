@@ -26,6 +26,7 @@
                             <div class="table-responsive">
 
                                 <form method="get" action="/attendance" class="mt-3 mb-3">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>"> <!-- Add CSRF token here -->
                                     <label for="startDate">Start Date:</label>
                                     <input type="date" id="startDate" name="startDate" value="<%= startDate %>" class="form-control-sm">
 
