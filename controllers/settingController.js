@@ -7,12 +7,16 @@ const renderSettingsForm = async (req, res) => {
     if (!setting) {
       return res.status(404).render('error', { message: 'No settings found.' });
     }
+
+    user = req.user
+
     res.render('settingsForm', 
         { 
             'setting': setting, 
             'title': 'Settings', 
             'page_name': 'settings',
-            'errors'    : [] 
+            'errors'    : [],
+            'user':user
         });
   } catch (error) {
     res.status(500).render('error', { message: 'Error fetching setting.', error });

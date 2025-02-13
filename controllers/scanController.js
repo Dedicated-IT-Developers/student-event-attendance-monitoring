@@ -10,6 +10,8 @@ const moment = require('moment');
  */
 const scanner = async (req, res) => {
 
+    user = req.user
+
     const acadYear = await activeAcadYear();
     const semester = await activeSem();
 
@@ -31,7 +33,7 @@ const scanner = async (req, res) => {
         res.json(profiles);
     }
 
-    res.render('rfscanner',  { 'title': 'Home', 'page_name': 'home', 'activities' : activities });
+    res.render('rfscanner',  { 'title': 'Home', 'page_name': 'home', 'activities' : activities,'user':user });
 }
 
 const submit = async (req, res) => {

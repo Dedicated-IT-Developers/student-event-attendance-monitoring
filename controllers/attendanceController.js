@@ -10,6 +10,8 @@ const { activeAcadYear, activeSem } = require('../utils/utils');
  */
 const index = async (req, res) => {
 
+  user = req.user
+
   const acadYear = await activeAcadYear();
   const semester = await activeSem();
 
@@ -200,7 +202,7 @@ const index = async (req, res) => {
             startDate : startDate,
             endDate : endDate,
             ActivityId: ActivityId,
-            'title': 'Attendance', 'page_name': 'attendance', 'activities' : activities
+            'title': 'Attendance', 'page_name': 'attendance', 'activities' : activities,'user':user
         });
 
     }

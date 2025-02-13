@@ -47,6 +47,9 @@
                          <span class="nav-link-text">Attendance</span>
                     </a><!--//nav-link-->
                 </li><!--//nav-item-->
+
+                <% if (user.role === 'user') { %>
+
                 <li class="nav-item">
                     <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
                     <a class="nav-link <% if (page_name === 'students') { %> active <% } %>" href="/students">
@@ -77,6 +80,9 @@
                          <span class="nav-link-text">Settings</span>
                     </a><!--//nav-link-->
                 </li><!--//nav-item-->
+
+                <% } %>
+
 
                 <li class="nav-item">
                     <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->

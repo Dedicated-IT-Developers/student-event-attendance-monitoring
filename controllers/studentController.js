@@ -49,6 +49,8 @@ const index = async (req, res) => {
         });
         const totalPages = Math.ceil(count / pageSize);
 
+        user = req.user
+
         res.render('students', {
             'title': 'Student', 
             'page_name': 'students',
@@ -58,6 +60,7 @@ const index = async (req, res) => {
             'students': rows,
             'pageSize': pageSize,
             'idNumber': idNumber,
+            'user':user
         });
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -70,10 +73,12 @@ const index = async (req, res) => {
  * @param {*} res 
  */
 const new_student = async (req, res) => {
+    user = req.user
     res.render('student_create', {
         'title'     : 'Create Student', 
         'page_name' : 'studentcreate',
-        'errors'    : []
+        'errors'    : [],
+        'user':user
     });
 };
 
@@ -85,6 +90,8 @@ const new_student = async (req, res) => {
  */
 const createStudent = async (req, res) => {
 
+    user = req.user
+
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
           return res.render('student_create', {
@@ -92,6 +99,7 @@ const createStudent = async (req, res) => {
             'student'   : req.body,
             'title'     : 'Create Student', 
             'page_name' : 'studentcreate',
+            'user':user
           });
         }
 
@@ -140,12 +148,14 @@ const getEditForm = async (req, res) => {
                 id: req.params.id
             }
         });
+        user = req.user
         //.findById(req.params.id);
         res.render('student_edit', { 
             'student' : student, 
             'title' : 'Edit Student', 
             'page_name' : 'studentedit', 
-            errors: null 
+            errors: null ,
+            'user':user
         });
     } catch (error) {
         console.log(error);
@@ -167,12 +177,14 @@ const updateStudent = async (req, res) => {
                 id: req.params.id
             }
         });
+        user = req.user
         //.findById(req.params.id);
         return res.render('student_edit', { 
             'student' : student, 
             'title' : 'Edit Student', 
             'page_name' : 'studentedit', 
-            errors: null 
+            errors: null ,
+            'user':user
         });
     }
 
@@ -194,7 +206,7 @@ const updateStudent = async (req, res) => {
         student.rfId = req.body.rfId;
 
         if (req.file) {
-            student.photo = req.file.filename;
+            student.photoUrl = req.file.filename;
         }
 
         await student.save();
@@ -213,8 +225,9 @@ const updateStudent = async (req, res) => {
  * @param {*} res 
  */
 const getImportForm = (req, res) => {
+    user = req.user
     res.render('student_import', { message: null, 'title'     : 'Import Student', 
-        'page_name' : 'studentimport'});
+        'page_name' : 'studentimport','user':user});
 };
 
 /**
@@ -224,9 +237,10 @@ const getImportForm = (req, res) => {
  * @returns 
  */
 const importStudents = async (req, res) => {
+    user = req.user
     if (!req.file) {
         return res.render('student_import', { message: 'No file uploaded' , 'title'     : 'Import Student', 
-            'page_name' : 'studentimport'});
+            'page_name' : 'studentimport','user':user});
     }
 
     const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
@@ -292,12 +306,12 @@ const importStudents = async (req, res) => {
         }
 
         res.render('student_import', { message: `${savedCount} of ${totalCount} rows saved/updated successfully` , 'title'     : 'Import Student', 
-            'page_name' : 'studentimport'});
+            'page_name' : 'studentimport','user':user});
             
     } catch (error) {
         console.error('Error reading Excel file:', error.message);
         res.render('student_import', { message: 'Error reading Excel file' , 'title'     : 'Import Student', 
-            'page_name' : 'studentimport'});
+            'page_name' : 'studentimport','user':user});
     } finally {
         // Clean up the uploaded file
         fs.unlink(filePath, (err) => {
@@ -316,6 +330,7 @@ const importStudents = async (req, res) => {
  */
 const getEnrollmentForm = async (req, res) => {
     try {
+        user = req.user
         const student = await db.Student.findOne({
             where: {
                 id: req.params.id
@@ -326,7 +341,8 @@ const getEnrollmentForm = async (req, res) => {
             'student' : student, 
             'title' : 'Edit Student', 
             'page_name' : 'studentedit', 
-            errors: null 
+            errors: null ,
+            'user':user
         });
     } catch (error) {
         console.log(error);
@@ -348,12 +364,14 @@ const enrollStudent = async (req, res) => {
                 id: req.params.id
             }
         });
+        user = req.user
         //.findById(req.params.id);
         return res.render('student_enrollment', { 
             'student' : student, 
             'title' : 'Edit Student', 
             'page_name' : 'studentedit', 
-            errors: null 
+            errors: null ,
+            'user':user
         });
     }
 
@@ -375,7 +393,7 @@ const enrollStudent = async (req, res) => {
         student.rfId = req.body.rfId;
 
         if (req.file) {
-            student.photo = req.file.filename;
+            student.photoUrl = req.file.filename;
         }
 
         await student.save();

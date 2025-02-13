@@ -18,6 +18,8 @@ const index = async (req, res) => {
     const offset = (page - 1) * pageSize;
     const limit = pageSize;
 
+    user = req.user
+
     try {
         const { count, rows } = await db.Activity.findAndCountAll({
             where: { semester: semester, acadYear: acadYear },
@@ -34,6 +36,7 @@ const index = async (req, res) => {
             'currentPage': page,
             'activity': rows,
             'pageSize': pageSize,
+            'user':user
         });
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -46,10 +49,12 @@ const index = async (req, res) => {
  * @param {*} res 
  */
 const new_activity = async (req, res) => {
+    user = req.user
     res.render('activity_create', {
         'title'     : 'Create Activity', 
         'page_name' : 'activitycreate',
-        'errors'    : []
+        'errors'    : [],
+        'user'      :   user
     });
 };
 
@@ -63,12 +68,15 @@ const create = async (req, res) => {
 
         const errors = validationResult(req);
 
+        user = req.user
+
         if (!errors.isEmpty()) {
           return res.render('activity_create', {
             'errors'    : errors.array(),
             'activity'   : req.body,
             'title'     : 'Create Activity', 
             'page_name' : 'activitycreate',
+            'user':user
           });
         }
 
