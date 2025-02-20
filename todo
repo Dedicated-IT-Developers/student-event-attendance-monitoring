@@ -1,12 +1,39 @@
 
 
+Add Activity
+Name:
+Date:
+In_AM_start
+In_AM_end
+Out_AM_start
+Out_AM_end
+In_PM_start
+In_PM_end
+Out_PM_start
+Out_PM_end
+
+Scanner
+Display only Today's Activity (display all in dropdown if have multiple activity in same day | or include time in Date)
+For scanning:
+- do not allow multiple attendance
+- do not accept if not scheduled
+- void an attendance if tap 3 times
+
+
+
+
+
+
+
+
+
 Switching to the Next Semester / Academic Year:
 - student controller
 * getEnrollmentForm - search ID Number, display info to inputs
-* enrollStudent - then update the info (year level, Section, etc), it will auto save to enrolled table
-
-
+* enrollStudent - then update the info (year level, Section, etc), it will auto save to enrolled table to the current semester
+Bulk
 * import student - check if have already that ID number, then update only if already exist
+Individual
 * Add student - check if have already that ID number, then update only if already exist
 
 
