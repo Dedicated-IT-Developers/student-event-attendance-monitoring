@@ -33,6 +33,21 @@ const scanner = async (req, res) => {
         res.json(profiles);
     }
 
+    // Normalize current date to midnight
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    // Filter by comparison to current date
+    activities = activities.filter(({ date }) => {
+        date.setHours(0, 0, 0, 0);
+        
+        return (
+            date.getUTCFullYear() === today.getUTCFullYear() &&
+            date.getUTCMonth() === today.getUTCMonth() &&
+            date.getUTCDate() === today.getUTCDate()
+        )
+    })
+
     res.render('rfscanner',  { 'title': 'Home', 'page_name': 'home', 'activities' : activities,'user':user });
 }
 
