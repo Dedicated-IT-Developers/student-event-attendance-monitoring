@@ -7208,3 +7208,9 @@ user is not defined
 2025-02-20 15:27:59 | INFO | Request completed
 2025-03-01 16:24:30 | WARN | [DEBUG] Server is running on port 3000
 2025-03-01 16:24:30 | ERROR | Unable to connect to the database
+2025-03-01 16:25:27 | WARN | [DEBUG] Server is running on port 3000
+2025-03-01 16:25:27 | ERROR | Unable to connect to the database
+2025-03-01 16:25:44 | WARN | [DEBUG] Server is running on port 3000
+2025-03-01 16:25:44 | ERROR | Unable to connect to the database
+2025-03-01 16:25:48 | WARN | [DEBUG] Server is running on port 3000
+2025-03-01 16:25:49 | ERROR | Unable to connect to the database
