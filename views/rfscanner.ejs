@@ -72,6 +72,18 @@ activitySelect.addEventListener('change', function() {
 
 
 		document.addEventListener('keypress', (event) => {
+
+			const ActivityId = document.getElementById('ActivityId').value;
+        
+        // Check if an active event exists 
+        if (!ActivityId) {
+			document.getElementById('att').innerHTML = '<span class="text-danger">Attendance not accepted: no active event or activitiy yet!</span>';
+            document.getElementById('rfId').value = '';
+            document.getElementById('rfId').focus();
+            return;
+        }
+        
+        console.log(ActivityId);
 			
 			// Clear any existing timeout
 			if (clearResultsTimeout) {
@@ -279,6 +291,7 @@ activitySelect.addEventListener('change', function() {
 		
 						
 					</p>
+					
 					<div style="align-items: center;">
 						<div id="results"></div>
 						<p id="att"></p>
