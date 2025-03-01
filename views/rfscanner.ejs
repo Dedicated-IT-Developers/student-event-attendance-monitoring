@@ -65,6 +65,11 @@
 
 		let scannedData = '';
 
+		const activitySelect = document.getElementById('ActivityId');
+activitySelect.addEventListener('change', function() {
+    this.blur(); // Unfocus the select element
+})
+
 
 		document.addEventListener('keypress', (event) => {
 			
@@ -185,7 +190,7 @@
 									
 									tapCount++;
 									
-									if (tapCount >= 3) {
+									if (tapCount >= 2) {
 										fetch('/scan/remove', {
 											method: 'POST',
 											headers: {
@@ -270,6 +275,9 @@
 							<% }); %>
 
 						</select>
+
+		
+						
 					</p>
 					<div style="align-items: center;">
 						<div id="results"></div>
