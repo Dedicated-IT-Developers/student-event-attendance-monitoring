@@ -22,7 +22,7 @@
 	    
         <div class="app-content pt-3 p-md-3 p-lg-4">
           <div class="container-xl">			    
-            <h1 class="app-page-title">Create Student</h1>
+            <h1 class="app-page-title">Create Activity</h1>
             <hr class="mb-4">
             <div class="row g-4 settings-section">
               <!-- <div class="col-12 col-md-4">
@@ -60,6 +60,113 @@
                         <% } %>
 
                       </div>
+
+                      <!-- Time Ranges -->
+                      <div class="mb-3">
+                        <label for="inAMStart" class="form-label">In AM Start</label>
+                        <input type="time" class="form-control" id="inAMStart" value="" name="inAMStart" >
+
+                        <% if (errors) { %>
+                            <% errors.forEach(error => { %>
+                              <% if (error.path === 'inAMStart') { %>
+                                <span class="error"><%= error.msg %></span>
+                              <% } %>
+                            <% }) %>
+                        <% } %>
+
+                      </div>
+                      <div class="mb-3">
+                        <label for="inAMEnd" class="form-label">In AM End</label>
+                        <input type="time" class="form-control" id="inAMEnd" value="" name="inAMEnd" >
+
+                        <% if (errors) { %>
+                            <% errors.forEach(error => { %>
+                              <% if (error.path === 'inAMEnd') { %>
+                                <span class="error"><%= error.msg %></span>
+                              <% } %>
+                            <% }) %>
+                        <% } %>
+
+                      </div>
+                      <div class="mb-3">
+                        <label for="outAMStart" class="form-label">Out AM Start</label>
+                        <input type="time" class="form-control" id="outAMStart" value="" name="outAMStart" >
+
+                        <% if (errors) { %>
+                            <% errors.forEach(error => { %>
+                              <% if (error.path === 'outAMStart') { %>
+                                <span class="error"><%= error.msg %></span>
+                              <% } %>
+                            <% }) %>
+                        <% } %>
+
+                      </div>
+                      <div class="mb-3">
+                        <label for="outAMEnd" class="form-label">Out AM End</label>
+                        <input type="time" class="form-control" id="outAMEnd" value="" name="outAMEnd" >
+
+                        <% if (errors) { %>
+                            <% errors.forEach(error => { %>
+                              <% if (error.path === 'outAMEnd') { %>
+                                <span class="error"><%= error.msg %></span>
+                              <% } %>
+                            <% }) %>
+                        <% } %>
+
+                      </div>
+                      <div class="mb-3">
+                        <label for="inPMStart" class="form-label">In PM Start</label>
+                        <input type="time" class="form-control" id="inPMStart" value="" name="inPMStart" >
+
+                        <% if (errors) { %>
+                            <% errors.forEach(error => { %>
+                              <% if (error.path === 'inPMStart') { %>
+                                <span class="error"><%= error.msg %></span>
+                              <% } %>
+                            <% }) %>
+                        <% } %>
+
+                      </div>
+                      <div class="mb-3">
+                        <label for="inPMEnd" class="form-label">In PM End</label>
+                        <input type="time" class="form-control" id="inPMEnd" value="" name="inPMEnd" >
+
+                        <% if (errors) { %>
+                            <% errors.forEach(error => { %>
+                              <% if (error.path === 'inPMEnd') { %>
+                                <span class="error"><%= error.msg %></span>
+                              <% } %>
+                            <% }) %>
+                        <% } %>
+
+                      </div>
+                      <div class="mb-3">
+                        <label for="outPMStart" class="form-label">Out PM Start</label>
+                        <input type="time" class="form-control" id="outPMStart" value="" name="outPMStart" >
+
+                        <% if (errors) { %>
+                            <% errors.forEach(error => { %>
+                              <% if (error.path === 'outPMStart') { %>
+                                <span class="error"><%= error.msg %></span>
+                              <% } %>
+                            <% }) %>
+                        <% } %>
+
+                      </div>
+                      <div class="mb-3">
+                        <label for="outPMEnd" class="form-label">Out PM End</label>
+                        <input type="time" class="form-control" id="outPMEnd" value="" name="outPMEnd" >
+
+                        <% if (errors) { %>
+                            <% errors.forEach(error => { %>
+                              <% if (error.path === 'outPMEnd') { %>
+                                <span class="error"><%= error.msg %></span>
+                              <% } %>
+                            <% }) %>
+                        <% } %>
+
+                      </div>
+                      <!-- Time Ranges -->
 
                       <div class="mb-3">
                         <label for="semester" class="form-label">semester</label>

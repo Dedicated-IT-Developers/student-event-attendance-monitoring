@@ -20,8 +20,15 @@ For scanning:
 - void an attendance if tap 3 times
 
 
-
-
+Add These Columns for 'Activity' Table:
+    inAMStart
+    inAMEnd
+    outAMStart
+    outAMEnd
+    inPMStart
+    inPMEnd
+    outPMStart
+    outPMEnd
 
 
 
