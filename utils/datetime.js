@@ -10,7 +10,7 @@
  */
 const timeStrToStd = (timeStr) => {
     const [hours, minutes] = timeStr.split(":").map(Number)
-	return `${hours % 12}:${minutes}` + (hours > 12 ? "pm" : "am")
+	return `${hours % 12}:${minutes == 0 ? '00' : minutes}` + (hours > 12 ? "pm" : "am")
 }
 
 /**

@@ -33,6 +33,10 @@
                                           <th class="cell">#</th>
                                           <th class="cell">Name</th>
                                           <th class="cell">Date</th>
+                                          <th class="cell">In AM</th>
+                                          <th class="cell">Out AM</th>
+                                          <th class="cell">In PM</th>
+                                          <th class="cell">Out PM</th>
                                           <th class="cell">Sem</th>
                                           <th class="cell">AY</th>
                                         </tr>
@@ -43,6 +47,10 @@
                                             <td class="cell"><%= index + 1 %></td> <!-- Auto count number -->
                                             <td class="cell"><%= act.activityName %></td>
                                             <td class="cell"><%= act.date %></td>
+                                            <td class="cell"><%= act.inAMStart %> - <%= act.inAMEnd %></td>
+                                            <td class="cell"><%= act.outAMStart %> - <%= act.outAMEnd %></td>
+                                            <td class="cell"><%= act.inPMStart %> - <%= act.inPMEnd %></td>
+                                            <td class="cell"><%= act.outPMStart %> - <%= act.outPMEnd %></td>
                                             <td class="cell"><%= act.semester %></td>
                                             <td class="cell"><%= act.acadYear %></td>
                                           </tr>
