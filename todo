@@ -1,5 +1,5 @@
 
-
+(status: done)
 Add Activity
 Name:
 Date:
@@ -12,6 +12,7 @@ In_PM_end
 Out_PM_start
 Out_PM_end
 
+(status: done)
 Scanner
 Display only Today's Activity (display all in dropdown if have multiple activity in same day | or include time in Date)
 For scanning:
@@ -19,8 +20,8 @@ For scanning:
 - do not accept if not scheduled
 - void an attendance if tap 3 times
 
-
-Add These Columns for 'Activity' Table:
+(status: done)
+Add These Columns for 'Activity' Table:(status: done)
     inAMStart
     inAMEnd
     outAMStart
@@ -29,6 +30,20 @@ Add These Columns for 'Activity' Table:
     inPMEnd
     outPMStart
     outPMEnd
+
+
+additional features:
+    Added to Attendance Table:
+        inAMTime
+        outAMTime
+        inPMTime
+        outPMTime
+
+    Export into Excel
+        Auto Compute Abcences per Event
+        Added time in and out
+        Summary Per Event
+        Time range Validation
 
 
 
