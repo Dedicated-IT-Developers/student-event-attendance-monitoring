@@ -59,6 +59,10 @@
                                             <th class="cell">Email</th>
                                             <th class="cell">Date</th>
                                             <th class="cell">Event</th>
+                                            <th class="cell">AM In</th>
+                                            <th class="cell">AM Out</th>
+                                            <th class="cell">PM In</th>
+                                            <th class="cell">PM Out</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -73,6 +77,48 @@
                                                 <td class="cell"><%= attendance.Student ? attendance.Student.email : 'N/A' %></td>
                                                 <td class="cell"><%= attendance.date.toLocaleString() %></td>
                                                 <td class="cell"><%= attendance.Student ? attendance.Activity.activityName : 'N/A' %></td>
+                                                <td class="cell">
+                                                    <%= attendance.inAMTime ? 
+                                                        new Date(`1970-01-01T${attendance.inAMTime}`).toLocaleTimeString('en-US', {
+                                                            hour: 'numeric',
+                                                            minute: '2-digit',
+                                                            hour12: true
+                                                        }) : '-' 
+                                                    %>
+                                                </td>
+                                                
+                                                <td class="cell">
+                                                    <%= attendance.outAMTime ? 
+                                                        new Date(`1970-01-01T${attendance.outAMTime}`).toLocaleTimeString('en-US', {
+                                                            hour: 'numeric',
+                                                            minute: '2-digit',
+                                                            hour12: true
+                                                        }) : '-' 
+                                                    %>
+                                                </td>
+                                                
+                                                <td class="cell">
+                                                    <%= attendance.inPMTime ? 
+                                                        new Date(`1970-01-01T${attendance.inPMTime}`).toLocaleTimeString('en-US', {
+                                                            hour: 'numeric',
+                                                            minute: '2-digit',
+                                                            hour12: true
+                                                        }) : '-' 
+                                                    %>
+                                                </td>
+                                                
+                                                <td class="cell">
+                                                    <%= attendance.outPMTime ? 
+                                                        new Date(`1970-01-01T${attendance.outPMTime}`).toLocaleTimeString('en-US', {
+                                                            hour: 'numeric',
+                                                            minute: '2-digit',
+                                                            hour12: true
+                                                        }) : '-' 
+                                                    %>
+                                                </td>
+                                                
+                                                
+                                                
                                             </tr>
                                         <% }); %>
                                         
@@ -130,5 +176,5 @@
     <%- include('./partials/footer.ejs') %>
 
 </body>
-</html> 
+</html>
 

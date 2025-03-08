@@ -29,7 +29,22 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING, 
         allowNull: true,
       },
-
+      inAMTime: {
+        type: DataTypes.TIME,
+        allowNull: true
+      },
+      outAMTime: {
+        type: DataTypes.TIME,
+        allowNull: true
+      },
+      inPMTime: {
+        type: DataTypes.TIME,
+        allowNull: true
+      },
+      outPMTime: {
+        type: DataTypes.TIME,
+        allowNull: true
+      }
     }, {
       tableName: 'Attendance' // Explicitly specify table name if different
     });
@@ -60,4 +75,3 @@ module.exports = (sequelize, DataTypes) => {
   
     return Attendance;
   };
-  
