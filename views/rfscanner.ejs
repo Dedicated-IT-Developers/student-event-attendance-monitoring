@@ -163,74 +163,65 @@ activitySelect.addEventListener('change', function() {
 								},
 								body: JSON.stringify({ 
 									id: profile.id,
-									ActivityId: ActivityId 
+									ActivityId: ActivityId,
+									currentTime: new Date().toTimeString().slice(0,8) // Add current time
 								})
 							})
 							.then(response => response.json())
 							.then(attendanceData => {
+								if (!attendanceData.withinTimeRange) {
+									document.getElementById('att').innerHTML = 
+										`<span class="text-danger">Attendance not accepted: ${attendanceData.message}</span>`;
+									return;
+								}
+
 								if (attendanceData.canSubmit) {
-
-
-									//save
-									// Make a fetch request to submit the attendance
+									// Submit attendance
 									fetch('/scan/submit', {
 										method: 'POST',
 										headers: {
-										'Content-Type': 'application/json'
+											'Content-Type': 'application/json'
 										},
 										body: JSON.stringify({ 
 											id: profile.id,
-											ActivityId: ActivityId 
+											ActivityId: ActivityId,
+											timeRange: attendanceData.timeRange,
+											currentTime: new Date().toTimeString().slice(0,8)
 										})
 									})
 									.then(response => response.json())
 									.then(data => {
-										// Handle the response data (e.g., show a success message)
-										console.log('Attendance submitted for:', profile.firstName, profile.lastName);
-										document.getElementById('att').innerHTML = 'Attendance submitted for: ' + profile.firstName + ' ' + profile.lastName;
-										console.log(data);
+										document.getElementById('att').innerHTML = 
+											`<span class="text-success">${data.message} for ${profile.firstName} ${profile.lastName}</span>`;
 									})
 									.catch(error => console.error('Error:', error));
-									//end save
-
-								} 
-								else 
-								{
-									
-									console.log('Attendance already recorded within 30 minutes for:', document.getElementById('ActivityId').options[document.getElementById('ActivityId').selectedIndex].text, profile.firstName, profile.lastName);
-									document.getElementById('att').innerHTML = 'Attendance already recorded at ' + document.getElementById('ActivityId').options[document.getElementById('ActivityId').selectedIndex].text + ' of ' + profile.firstName + ' ' + profile.lastName;
-									
+								} else {
 									tapCount++;
 									
-									if (tapCount >= 2) {
+									if (tapCount >= 3) {
 										fetch('/scan/remove', {
 											method: 'POST',
 											headers: {
 												'Content-Type': 'application/json'
 											},
-											//body: JSON.stringify({ rfId: scannedData })
 											body: JSON.stringify({ 
 												id: profile.id,
-												ActivityId: ActivityId 
+												ActivityId: ActivityId,
+												timeRange: attendanceData.timeRange
 											})
 										})
 										.then(response => response.json())
 										.then(data => {
-											console.log('Attendance removed for:', profile.firstName);
-											document.getElementById('att').innerHTML = 'Attendance removed for: ' + profile.firstName;
+											document.getElementById('att').innerHTML = 
+												`<span class="text-warning">${data.message} for ${profile.firstName}</span>`;
+											tapCount = 0;
 										})
 										.catch(error => console.error('Error:', error));
-										
-										tapCount = 0; // Reset tap count after removing attendance
-										scannedData = '';
 										return;
 									}
-									clearTimeout(tapTimeout); // Clear the timeout if another tap happens within 30 seconds
-									tapTimeout = setTimeout(() => {
-										tapCount = 0; // Reset tap count after 30 seconds of inactivity
-									}, 30000);
-									//end tap count
 
+									document.getElementById('att').innerHTML = 
+										`<span class="text-info">Already recorded for ${attendanceData.timeRange} period (Tap ${3-tapCount} more times to remove)</span>`;
 								}
 							})
 							.catch(error => console.error('Error:', error));
@@ -317,5 +308,5 @@ activitySelect.addEventListener('change', function() {
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 </body>
-</html> 
+</html>
 
